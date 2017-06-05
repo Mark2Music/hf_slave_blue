@@ -30,6 +30,7 @@ void loop()
         case '1':
            digitalWrite(relay_control,LOW);  //open the door
            delay(300);
+           digitalWrite(relay_control,HIGH);
            break;
         case '0':
            digitalWrite(relay_control,HIGH);   //close the door
