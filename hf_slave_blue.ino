@@ -2,6 +2,7 @@
 * MLT-BT05 4.0 蓝牙模块
 * Support the IOS and ANDROID systems.
 * 2017.04.24.
+* XG-BM02X 5.0 蓝牙模块
 */
 
 /*if the blueteeth is connected, this pin will exported a high level.
