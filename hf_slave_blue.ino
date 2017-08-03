@@ -40,8 +40,8 @@ void loop()
       {
           if(Serial.available())
           {
-        	 ret = Serial.readBytes(receive_buffer, 1);
-        	 if(ret == 1)
+        	 ret = Serial.readBytes(receive_buffer, 2);
+        	 if(ret == 2)
         	 {
                 	   if(receive_buffer[0] == 'M')
                 	   {
