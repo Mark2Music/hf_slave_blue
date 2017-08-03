@@ -34,50 +34,33 @@ void loop()
   //query and change the role to 'S'
   if (already_slave == false)
   {
-      //change the status to slave
-      ret = Serial.write("AT+ROLE?\r");
-      if (ret == 9)
-      {
+      //change the status to slave 
+     LABEL_CMD:
+     Serial.flush(); 
+     ret = Serial.write("AT+ROLE=S\r");
+     if (ret == 10)
+     {
           if(Serial.available())
           {
-        	 ret = Serial.readBytes(receive_buffer, 2);
-        	 if(ret == 2)
-        	 {
-                	   if(receive_buffer[0] == 'M')
-                	   {
-                		LABEL_CMD:
-                		Serial.flush(); 
-                		ret = Serial.write("AT+ROLE=S\r");
-                		if (ret == 10)
-                		{
-                		    if(Serial.available())
-                		    {
-                			ret = Serial.readBytes(receive_buffer, 2);
-                			if(ret == 2)
-                			{
-                			    if (receive_buffer[0] != 'O' && receive_buffer[1] != 'K')
-                			    {
-                				goto LABEL_CMD;
-                			    }
-                                            else if (receive_buffer[0] == 'O' && receive_buffer[1] == 'K')
-                			    {
-                				already_slave = true;
-                			    }
-                			
-                			}
-                		    }	
-                		}
-                	   }
-                           else if (receive_buffer[0] == 'S')
-                           {
-                               already_slave = true; 
-                           }		
-        	 }
-          }		
+              ret = Serial.readBytes(receive_buffer, 2);
+              if(ret == 2)
+              {
+          	  if (receive_buffer[0] != 'O' && receive_buffer[1] != 'K')
+          	  {
+          	      goto LABEL_CMD;
+          	  }
+                  else if (receive_buffer[0] == 'O' && receive_buffer[1] == 'K')
+          	  {
+          	      already_slave = true;
+          	  }
+          			
+              }
+          }	
       }
-    
       Serial.flush();
+             
   }
+    
   
   
   
