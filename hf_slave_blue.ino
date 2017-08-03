@@ -15,6 +15,7 @@ int relay_control = 4; // low level will trigger the relay control to work
 char receive_buffer[2];
 int ret = 0;
 boolean already_slave = false;
+int count = 0;
 
 void setup()
 {
@@ -40,6 +41,7 @@ void loop()
      ret = Serial.write("AT+ROLE=S\r");
      if (ret == 10)
      {
+          count++;  
           if(Serial.available())
           {
               ret = Serial.readBytes(receive_buffer, 2);
@@ -55,6 +57,12 @@ void loop()
           	  }
           			
               }
+          }
+          
+          if(count >= 5)
+          {//if five times is not ok, default is ok...if that happened, most probably reason is the slave bluetooth is bad!
+              count = 0;
+              already_slave = true;
           }	
       }
       Serial.flush();
