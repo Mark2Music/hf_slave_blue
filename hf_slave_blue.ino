@@ -46,27 +46,27 @@ void loop()
           {  
     			  if(Serial.available())
     			  {
-    				  ret = Serial.readBytes(receive_buffer, 2);
-    				  if(ret == 2)
-    				  {
-    				  if (receive_buffer[0] != 'O' && receive_buffer[1] != 'K')
-    				  {
-    					  goto LABEL_CMD;
-    				  }
-    				  else if (receive_buffer[0] == 'O' && receive_buffer[1] == 'K')
-    				  {
-    					  already_slave = true;
-    				  }
+      				  ret = Serial.readBytes(receive_buffer, 2);
+      				  if(ret == 2)
+      				  {
+          				  if (receive_buffer[0] != 'O' && receive_buffer[1] != 'K')
+          				  {
+          					  goto LABEL_CMD;
+          				  }
+          				  else if (receive_buffer[0] == 'O' && receive_buffer[1] == 'K')
+          				  {
+          					  already_slave = true;
+          				  }
+      			    }
     			  }
-    			}
-		  } 	  
+		      } 	  
           else if(count >= 5)
           {//if five times is not ok, default is ok...if that happened, most probably reason is the slave bluetooth is bad!
               count = 0;
               already_slave = true;
           }	
-      }
-      Serial.flush();
+     }
+     Serial.flush();
              
   }
     
