@@ -35,31 +35,32 @@ void loop()
   //query and change the role to 'S'
   if (already_slave == false)
   {
-      //change the status to slave 
+     //change the status to slave 
      LABEL_CMD:
      Serial.flush(); 
      ret = Serial.write("AT+ROLE=S\r");
      if (ret == 10)
      {
-          count++;  
-          if(Serial.available())
-          {
-              ret = Serial.readBytes(receive_buffer, 2);
-              if(ret == 2)
-              {
-          	  if (receive_buffer[0] != 'O' && receive_buffer[1] != 'K')
-          	  {
-          	      goto LABEL_CMD;
-          	  }
-                  else if (receive_buffer[0] == 'O' && receive_buffer[1] == 'K')
-          	  {
-          	      already_slave = true;
-          	  }
-          			
-              }
-          }
-          
-          if(count >= 5)
+          count++;
+          if(count < 5)
+          {  
+    			  if(Serial.available())
+    			  {
+    				  ret = Serial.readBytes(receive_buffer, 2);
+    				  if(ret == 2)
+    				  {
+    				  if (receive_buffer[0] != 'O' && receive_buffer[1] != 'K')
+    				  {
+    					  goto LABEL_CMD;
+    				  }
+    				  else if (receive_buffer[0] == 'O' && receive_buffer[1] == 'K')
+    				  {
+    					  already_slave = true;
+    				  }
+    			  }
+    			}
+		  } 	  
+          else if(count >= 5)
           {//if five times is not ok, default is ok...if that happened, most probably reason is the slave bluetooth is bad!
               count = 0;
               already_slave = true;
@@ -69,26 +70,51 @@ void loop()
              
   }
     
-  
-  
-  
   if(Serial.available())
   {
       char cmd = Serial.read();    //从串口读取info
       switch(cmd)
       {
         case '1':
-           digitalWrite(relay_control,LOW);  //open the door
-           delay(300);
-           digitalWrite(relay_control,HIGH);
+		   ret = Serial.write("8");
+		   if (ret == 1)
+		   {
+			  digitalWrite(relay_control,LOW);  //open the door
+			  delay(300);
+              digitalWrite(relay_control,HIGH);	
+		   }
+		   else if(1 == Serial.write("8"))
+		   {
+			  digitalWrite(relay_control,LOW);  //open the door
+			  delay(300);
+              digitalWrite(relay_control,HIGH); 	
+		   }
+		   else
+		   {
+			  digitalWrite(relay_control,LOW);  //open the door
+			  delay(300);
+              digitalWrite(relay_control,HIGH); 	
+		   }	
            break;
+           
         case '0':
-           digitalWrite(relay_control,HIGH);   //close the door
-           delay(300);
-           break;           
+		   ret = Serial.write("8");
+		   if (ret == 1)
+		   {
+			  digitalWrite(relay_control,HIGH);   //close the door	
+		   }
+		   else if(1 == Serial.write("8"))
+		   {
+			  digitalWrite(relay_control,HIGH);   //close the door	
+		   }
+		   else
+		   {
+			  digitalWrite(relay_control,HIGH);   //close the door	
+		   }
+           break;
+                      
         default:
            break;
-      
       }
       Serial.flush();
       
